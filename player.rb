@@ -20,4 +20,8 @@ class Player
     @lives = 3
     @score = 0
   end
+
+  def has_lives?
+    @lives > 0
+  end
 end

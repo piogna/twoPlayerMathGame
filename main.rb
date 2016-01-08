@@ -1,4 +1,4 @@
-#main game loop
-while true
+require "./game"
 
-end
+game = Game.new
+game.play
