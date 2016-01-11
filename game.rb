@@ -1,4 +1,5 @@
 require "./player"
+require "./exceptions"
 class Game
   attr_accessor :player_one
   attr_accessor :player_two
@@ -17,12 +18,24 @@ class Game
 
   def on_start
     puts "Welcome to the Math Game!"
-    print "Player 1! What is your name? "
-    name = gets.chomp
+    begin
+      print "Player 1! What is your name? "
+      name = gets.chomp
+      raise InvalidNameError if name.length < 1
+    rescue InvalidNameError
+      puts "You have to put in a name"
+      retry
+    end
     @player_one = Player.new(name)
     puts "Welcome, #{name}!"
-    print "Player 2! What is your name? "
-    name = gets.chomp
+    begin
+      print "Player 2! What is your name? "
+      name = gets.chomp
+      raise InvalidNameError if name.length < 1
+    rescue InvalidNameError
+      puts "You have to put in a name"
+      retry
+    end
     @player_two = Player.new(name)
     puts "Welcome, #{name}!"
   end
@@ -93,8 +106,14 @@ class Game
   def next_turn(player)
     puts "Turn number #{@turn}"
     problem = get_problem
-    puts "#{player.name}! Here is your question! \n#{problem}"
-    answer = gets.chomp
+    begin
+      puts "#{player.name}! Here is your question! \n#{problem}"
+      answer = gets.chomp
+      raise InvalidGuessError unless (answer.length > 0 && answer =~ /\\d+/)
+    rescue InvalidGuessError
+      puts "You have to input a valid number."
+      retry
+    end
     if answer_correct? problem, answer
       player.add_to_score
       puts "Great job, #{@player_one.name}! You got it right!"
